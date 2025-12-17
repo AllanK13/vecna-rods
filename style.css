@@ -1,3 +1,61 @@
+#statTracker {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 4px 24px #000a;
+    color: #fff;
+    min-width: 320px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 36px 48px 40px 48px;
+    font-size: 1.2em;
+    border-top: 2px solid #e53935;
+    animation: fadeInStats 0.5s;
+}
+
+#statTracker h2 {
+    color: #e53935;
+    font-size: 2em;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px #000a;
+}
+
+#statTracker div {
+    margin-bottom: 18px;
+    font-size: 1.1em;
+    background: rgba(255,255,255,0.04);
+    padding: 10px 18px;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 1px 4px #0002;
+}
+
+#statTracker span {
+    color: #ff5252;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#statTracker br {
+    line-height: 2.2;
+}
+
+@keyframes fadeInStats {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-btn {
+    transition: background 0.2s, color 0.2s;
+}
+.tab-btn:focus {
+    outline: 2px solid #e53935;
+    outline-offset: -2px;
+}
 #rodDropdown {
     font-size: 1.2em;
     padding: 6px 18px 6px 8px;

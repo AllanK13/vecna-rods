@@ -1,4 +1,4 @@
-// Rod Ninja Game
+// Rod Selection Game
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 const boxImg = document.getElementById('box');
@@ -15,6 +15,38 @@ let score = 0;
 let rodCount = 5;
 let rodImages = [];
 let gameActive = false;
+
+// Stat tracker variables
+let totalGamesPlayed = 0;
+let highScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+// Track total rods grabbed and games played per rod count for averages
+let rodsGrabbedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+let gamesPlayedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+
+function updateStatsDisplay() {
+    document.getElementById('gamesPlayed').textContent = `Total Games Played: ${totalGamesPlayed}`;
+    let hsList = '';
+    let avgList = '';
+        // Put the total in its own box and show breakdown separately
+        const totalElem = document.getElementById('totalGames');
+        if (totalElem) totalElem.textContent = `Total Games Played: ${totalGamesPlayed}`;
+
+        let gamesPlayedHTML = 'Games Played by Rod Count:<br>';
+        for (let i = 1; i <= 7; i++) {
+            gamesPlayedHTML += `<span style='color:#ff5252;'>${i}:</span> <span style='color:#ff5252;'>${gamesPlayedPerCount[i]}</span>&nbsp;&nbsp;`;
+        }
+        document.getElementById('gamesPlayed').innerHTML = gamesPlayedHTML;
+
+        hsList = '';
+        avgList = '';
+        for (let i = 1; i <= 7; i++) {
+            hsList += `${i}: <span style='color:#ff5252;'>${highScores[i]}</span>&nbsp;&nbsp;`;
+            let avg = gamesPlayedPerCount[i] > 0 ? (rodsGrabbedPerCount[i] / gamesPlayedPerCount[i]).toFixed(2) : 0;
+            avgList += `<span style='color:#ff5252;'>${i}:</span> <span style='color:#ff5252;'>${avg}</span>&nbsp;&nbsp;`;
+        }
+        document.getElementById('highScoreList').innerHTML = hsList;
+        document.getElementById('avgRods').innerHTML = `Average Rods Grabbed per Selection:<br>${avgList}`;
+}
 
 // Load rod images (assume assets/rod1.png, assets/rod2.png, ...)
 for (let i = 1; i <= 7; i++) {
@@ -166,6 +198,15 @@ function gameLoop() {
             numList.appendChild(li);
         });
         scoreDiv.style.visibility = 'visible';
+        // Update stats after game ends
+        // Update high score for this rod count
+        if (score > highScores[rodCount]) {
+            highScores[rodCount] = score;
+        }
+        // Track rods grabbed and games played for this rod count
+        rodsGrabbedPerCount[rodCount] += score;
+        gamesPlayedPerCount[rodCount] += 1;
+        updateStatsDisplay();
         return;
     }
     requestAnimationFrame(gameLoop);
@@ -194,6 +235,9 @@ function startGame() {
         gameActive = true;
         gameLoop();
     }, delay);
+    // Only increment games played when a new game starts
+    totalGamesPlayed++;
+    updateStatsDisplay();
 }
 
 
@@ -228,4 +272,24 @@ canvas.addEventListener('mouseup', () => { isSwiping = false; });
 canvas.addEventListener('mouseleave', () => { isSwiping = false; });
 canvas.addEventListener('touchend', () => { isSwiping = false; });
 
+// Initialize stats display on load
+updateStatsDisplay();
+
 startBtn.addEventListener('click', startGame);
+
+// Reset stats handler
+function resetStats() {
+    totalGamesPlayed = 0;
+    highScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    rodsGrabbedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    gamesPlayedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    updateStatsDisplay();
+}
+
+const resetBtn = document.getElementById('resetStatsBtn');
+if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+        const ok = window.confirm('Are you sure you want to reset all stats? This cannot be undone.');
+        if (ok) resetStats();
+    });
+}

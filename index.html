@@ -7,28 +7,69 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <img id="box" src="assets/box.png" alt="Box">
-        <canvas id="game-canvas"></canvas>
-        <div id="score">Rods Grabbed: 0
-            <ul id="grabbedList" style="list-style:none; padding:0; margin:0; display:none;"></ul>
+    <div id="tab-container" style="width:1000px;margin:0 auto;">
+        <div id="tabs" style="display:flex;">
+            <button id="gameTab" class="tab-btn" style="flex:1;font-size:1.2em;padding:10px 0;border:none;background:#222;color:#e53935;cursor:pointer;border-radius:12px 12px 0 0;">Game</button>
+            <button id="statsTab" class="tab-btn" style="flex:1;font-size:1.2em;padding:10px 0;border:none;background:#333;color:#e53935;cursor:pointer;border-radius:12px 12px 0 0;">Stats</button>
         </div>
-        <div id="rodRadiosContainer">
-            <label for="rodDropdown">Rods: </label>
-            <select id="rodDropdown">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7" selected>7</option>
-            </select>
+        <div id="game-container" style="display:block;">
+            <img id="box" src="assets/box.png" alt="Box">
+            <canvas id="game-canvas"></canvas>
+            <div id="score">Rods Grabbed: 0
+                <ul id="grabbedList" style="list-style:none; padding:0; margin:0; display:none;"></ul>
+            </div>
+            <div id="rodRadiosContainer">
+                <label for="rodDropdown">Rods: </label>
+                <select id="rodDropdown">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7" selected>7</option>
+                </select>
+            </div>
+            <div id="startBtnContainer">
+                <button id="startBtn">Start<br>Game</button>
+            </div>
         </div>
-        <div id="startBtnContainer">
-            <button id="startBtn">Start<br>Game</button>
+        <div id="statTracker" style="display:none;background:rgba(34,34,34,0.95);padding:24px 32px 72px 32px;border-radius:0 0 16px 16px;box-shadow:0 2px 8px #000a;color:#fff;min-width:220px;position:relative;">
+            <h2 style="margin:0 0 16px 0;">Stats</h2>
+            <div id="totalGamesBox" style="background:rgba(0,0,0,0.25);padding:12px;border-radius:8px;margin-bottom:10px;text-align:center;">
+                <div id="totalGames" style="font-size:1.1em;color:#ff5252;font-weight:700;">Total Games Played: 0</div>
+            </div>
+            <div id="gamesPlayed">Games Played by Rod Count:</div>
+            <div id="highScores">Highest Score per Rods:<br><span id="highScoreList"></span></div>
+            <div id="avgRods">Average Rods Grabbed: 0</div>
+            <div style="margin-top:16px;text-align:center;">
+                <button id="resetStatsBtn" style="background:#444;border:none;color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4);">Reset Stats</button>
+            </div>
         </div>
     </div>
+    
+
+    <script>
+    // Tab switching logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const gameTab = document.getElementById('gameTab');
+        const statsTab = document.getElementById('statsTab');
+        const gameContainer = document.getElementById('game-container');
+        const statTracker = document.getElementById('statTracker');
+        gameTab.onclick = function() {
+            gameTab.style.background = '#222';
+            statsTab.style.background = '#333';
+            gameContainer.style.display = 'block';
+            statTracker.style.display = 'none';
+        };
+        statsTab.onclick = function() {
+            statsTab.style.background = '#222';
+            gameTab.style.background = '#333';
+            gameContainer.style.display = 'none';
+            statTracker.style.display = 'block';
+        };
+    });
+    </script>
     <script src="game.js"></script>
 </body>
 </html>
