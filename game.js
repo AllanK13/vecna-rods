@@ -16,12 +16,19 @@ let rodCount = 5;
 let rodImages = [];
 let gameActive = false;
 
-// Stat tracker variables
-let totalGamesPlayed = 0;
-let highScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+// Stat tracker variables — loaded from localStorage so they persist across refreshes
+let totalGamesPlayed = parseInt(localStorage.getItem('totalGamesPlayed')) || 0;
+let highScores = JSON.parse(localStorage.getItem('highScores')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
 // Track total rods grabbed and games played per rod count for averages
-let rodsGrabbedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
-let gamesPlayedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+let rodsGrabbedPerCount = JSON.parse(localStorage.getItem('rodsGrabbedPerCount')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+let gamesPlayedPerCount = JSON.parse(localStorage.getItem('gamesPlayedPerCount')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+
+function saveStats() {
+    localStorage.setItem('totalGamesPlayed', totalGamesPlayed);
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+    localStorage.setItem('rodsGrabbedPerCount', JSON.stringify(rodsGrabbedPerCount));
+    localStorage.setItem('gamesPlayedPerCount', JSON.stringify(gamesPlayedPerCount));
+}
 
 function updateStatsDisplay() {
     document.getElementById('gamesPlayed').textContent = `Total Games Played: ${totalGamesPlayed}`;
@@ -207,6 +214,7 @@ function gameLoop() {
         rodsGrabbedPerCount[rodCount] += score;
         gamesPlayedPerCount[rodCount] += 1;
         updateStatsDisplay();
+        saveStats();
         return;
     }
     requestAnimationFrame(gameLoop);
@@ -238,6 +246,7 @@ function startGame() {
     // Only increment games played when a new game starts
     totalGamesPlayed++;
     updateStatsDisplay();
+    saveStats();
 }
 
 
@@ -284,6 +293,7 @@ function resetStats() {
     rodsGrabbedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
     gamesPlayedPerCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
     updateStatsDisplay();
+    saveStats();
 }
 
 const resetBtn = document.getElementById('resetStatsBtn');
